@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Destiny | Astrology Reading</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Mitr:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        mitr: ['Mitr', 'sans-serif'],
+                    },
+                    colors: {
+                        apex: {
+                            dark: '#0a120d',
+                            green: '#172a1c',
+                            light: '#25422d',
+                            brown: '#d2b48c',
+                            brownDim: '#a68b6a',
+                            text: '#f0ead6'
+                        }
+                    },
+                    backgroundImage: {
+                        'forest-night': 'linear-gradient(180deg, #0a120d 0%, #0f1c13 40%, #172a1c 80%, #1e3624 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0a120d;
+            color: #f0ead6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: rgba(23, 42, 28, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(210, 180, 140, 0.15);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(37, 66, 45, 0.2);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .glass-panel:hover {
+            border-color: rgba(210, 180, 140, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(210, 180, 140, 0.1);
+        }
+
+        /* Star Animation */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(0.6) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+        }
+        .star {
+            position: absolute;
+            animation: twinkle infinite ease-in-out;
+            fill: #d2b48c;
+            filter: drop-shadow(0 0 6px rgba(210, 180, 140, 0.8));
+        }
+
+        /* Shooting Star / Meteor Animation */
+        .meteor {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(210,180,140,1) 0%, rgba(210,180,140,0) 100%);
+            border-radius: 50%;
+            transform: rotate(-45deg);
+            animation: meteor-shower 8s linear infinite;
+            opacity: 0;
+            filter: drop-shadow(0 0 4px #d2b48c);
+        }
+        .meteor::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #fff;
+            top: -1px;
+            left: 0;
+            box-shadow: 0 0 10px 2px #d2b48c;
+        }
+
+        @keyframes meteor-shower {
+            0% { transform: rotate(-45deg) translateX(-200px); opacity: 1; }
+            15% { transform: rotate(-45deg) translateX(400px); opacity: 0; }
+            100% { transform: rotate(-45deg) translateX(400px); opacity: 0; }
+        }
+
+        /* Magical Background Aura */
+        .magical-aura {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            opacity: 0.35;
+            animation: pulseAura 12s infinite alternate ease-in-out;
+        }
+        .aura-purple { background: #1a3322; width: 40vw; height: 40vw; top: 10%; left: -10vw; }
+        .aura-gold { background: #5c4033; width: 30vw; height: 30vw; top: 40%; right: -5vw; }
+
+        @keyframes pulseAura {
+            0% { transform: scale(0.9) translate(0, 0); opacity: 0.2; }
+            100% { transform: scale(1.2) translate(5%, 5%); opacity: 0.4; }
+        }
+
+        /* Cloud Animations */
+        @keyframes floatCloud {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-3%) translateY(2%); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+        .cloud-bg {
+            animation: floatCloud 25s infinite ease-in-out;
+        }
+
+        /* Gradient Text */
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #d2b48c 0%, #f0ead6 50%, #a68b6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a120d; }
+        ::-webkit-scrollbar-thumb { background: #25422d; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d2b48c; }
+
+        /* Divider */
+        .moon-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(210,180,140,0.6), transparent);
+            margin: 2rem 0;
+            position: relative;
+        }
+        .moon-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 8px;
+            height: 8px;
+            background: #d2b48c;
+            box-shadow: 0 0 10px #d2b48c;
+        }
+
+        /* SVG Glow Classes */
+        .svg-glow-pink { filter: drop-shadow(0 0 6px rgba(210,180,140,0.7)); }
+        .svg-glow-blue { filter: drop-shadow(0 0 6px rgba(166,139,106,0.7)); }
+        .svg-glow-yellow { filter: drop-shadow(0 0 6px rgba(240,234,214,0.7)); }
+    </style>
+</head>
+<body class="font-mitr antialiased relative min-h-screen flex flex-col items-center">
+
+    <div class="fixed inset-0 z-0 pointer-events-none bg-forest-night overflow-hidden">
+        
+        <div class="magical-aura aura-purple"></div>
+        <div class="magical-aura aura-gold" style="animation-delay: -5s;"></div>
+
+        <svg class="absolute top-10 right-[-15%] md:right-5 w-72 md:w-[450px] h-72 md:h-[450px] opacity-[0.15]" viewBox="0 0 100 100">
+            <path d="M50 0 A 50 50 0 1 1 0 50 A 40 40 0 1 0 50 0" fill="#d2b48c" filter="blur(5px)"></path>
+        </svg>
+
+        <div class="meteor top-[15%] left-[30%]" style="animation-delay: 2s;"></div>
+        <div class="meteor top-[50%] right-[10%]" style="animation-delay: 5s;"></div>
+        <div class="meteor top-[5%] right-[40%]" style="animation-delay: 8s;"></div>
+
+        <svg class="star top-[10%] left-[15%] w-6 h-6" style="animation-duration: 3s;" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+        <svg class="star top-[25%] right-[20%] w-4 h-4" style="animation-duration: 4s; animation-delay: 1s;" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+        <svg class="star top-[65%] left-[8%] w-8 h-8" style="animation-duration: 5s; animation-delay: 2s;" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+        <svg class="star top-[80%] right-[15%] w-5 h-5" style="animation-duration: 3.5s; animation-delay: 0.5s;" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+        <svg class="star top-[40%] left-[50%] w-3 h-3" style="animation-duration: 2s;" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+        <svg class="star top-[15%] right-[45%] w-4 h-4" style="animation-duration: 4.5s; animation-delay: 1.5s;" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+
+        <div class="absolute bottom-0 left-0 w-full h-[60vh] cloud-bg">
+            <svg viewBox="0 0 1440 320" class="absolute bottom-0 w-full h-full object-cover opacity-60">
+                <path fill="#172a1c" fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,202.7C672,213,768,203,864,176C960,149,1056,107,1152,101.3C1248,96,1344,128,1392,144L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+            <svg viewBox="0 0 1440 320" class="absolute bottom-[-50px] w-full h-full object-cover opacity-90">
+                <path fill="#0a120d" fill-opacity="1" d="M0,96L60,122.7C120,149,240,203,360,213.3C480,224,600,192,720,170.7C840,149,960,139,1080,154.7C1200,171,1320,213,1380,234.7L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <main class="relative z-10 w-full max-w-4xl px-4 py-12 md:py-20 flex flex-col gap-10">
+        
+        <header class="text-center relative mb-6">
+            
+            <div class="mb-6 flex justify-center w-full">
+                <img src="https://drive.google.com/uc?export=view&id=1zlnTbWvV9en_Hi4eamBzpUCYTUCjbqLA" alt="Banner" class="w-full max-w-2xl rounded-2xl shadow-lg border border-apex-brown/30">
+            </div>
+
+            <h1 class="font-cinzel text-5xl md:text-7xl font-bold tracking-widest text-gradient-gold drop-shadow-lg mb-2 relative inline-flex items-center justify-center">
+                <img src="https://drive.google.com/uc?export=view&id=1lwGcnJx9Amsx-5A9-691EwGXOIZNXNRb" alt="Logo" class="absolute -left-12 md:-left-16 -top-2 md:-top-4 w-14 h-14 md:w-20 md:h-20 rounded-full border border-apex-brown/50 shadow-[0_0_15px_rgba(210,180,140,0.6)]">
+                APEX
+            </h1>
+            <h2 class="font-cinzel text-2xl md:text-3xl text-apex-brown mt-1 italic tracking-wider opacity-90">Destiny</h2>
+            <div class="mt-6 inline-block bg-[#122417]/60 border border-apex-brown/30 rounded-full px-6 py-2 backdrop-blur-md shadow-[0_0_20px_rgba(210,180,140,0.1)]">
+                <p class="font-mitr text-apex-brown/90 text-sm md:text-base tracking-wide">Let fortunetelling be just a guide, not all of life.</p>
+            </div>
+        </header>
+
+        <section class="glass-panel p-8 relative overflow-hidden">
+            <svg class="absolute -top-10 -right-10 w-40 h-40 fill-apex-brown/5 rotate-45 pointer-events-none" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+            
+            <div class="flex items-center gap-4 mb-8 justify-center">
+                <svg class="w-6 h-6 fill-apex-brown filter drop-shadow-[0_0_5px_rgba(210,180,140,0.8)]" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                <h3 class="font-cinzel text-2xl md:text-3xl text-apex-brown font-bold tracking-widest">APEX TEXT</h3>
+                <svg class="w-6 h-6 fill-apex-brown filter drop-shadow-[0_0_5px_rgba(210,180,140,0.8)]" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+            </div>
+            
+            <p class="text-center text-apex-text/70 text-sm mb-6">สำหรับคนต้องการคำตอบแบบกระชับ ไม่ต้องนัดเวลา</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                <div class="flex flex-col items-center justify-center p-6 bg-[#122417]/70 rounded-2xl border border-apex-brown/20 hover:border-apex-brown/50 transition-all duration-300 group shadow-lg">
+                    <span class="text-lg text-apex-text mb-2 group-hover:text-apex-brown transition-colors">1 Question</span>
+                    <div class="font-cinzel text-4xl text-apex-brown font-bold mb-1 drop-shadow-md">49 <span class="text-lg font-mitr font-normal text-apex-text">บาท</span></div>
+                </div>
+                
+                <div class="flex flex-col items-center justify-center p-6 bg-[#122417]/70 rounded-2xl border border-apex-brown/20 hover:border-apex-brown/50 transition-all duration-300 group shadow-lg">
+                    <span class="text-lg text-apex-text mb-2 group-hover:text-apex-brown transition-colors">2 Questions</span>
+                    <div class="font-cinzel text-4xl text-apex-brown font-bold mb-1 drop-shadow-md">89 <span class="text-lg font-mitr font-normal text-apex-text">บาท</span></div>
+                </div>
+
+                <div class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#1c3622]/90 to-[#122417]/80 rounded-2xl border border-apex-brown/40 hover:border-apex-brown transition-all duration-300 relative overflow-hidden group shadow-[0_0_15px_rgba(210,180,140,0.15)] hover:shadow-[0_0_25px_rgba(210,180,140,0.3)]">
+                    <div class="absolute top-0 right-0 bg-apex-brown text-apex-dark text-[10px] md:text-xs px-4 py-1.5 font-bold rounded-bl-xl tracking-wider shadow-md">POPULAR</div>
+                    <span class="text-lg text-apex-text mb-2 group-hover:text-apex-brown transition-colors mt-2">5 Questions</span>
+                    <div class="font-cinzel text-4xl text-apex-brown font-bold mb-1 drop-shadow-md">199 <span class="text-lg font-mitr font-normal text-apex-text">บาท</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel p-8">
+            <div class="flex items-center gap-4 mb-10 justify-center">
+                <svg class="w-6 h-6 fill-apex-brown filter drop-shadow-[0_0_5px_rgba(210,180,140,0.8)]" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                <h3 class="font-cinzel text-2xl md:text-3xl text-apex-brown font-bold tracking-widest text-center">APEX LIVE & DESIGN</h3>
+                <svg class="w-6 h-6 fill-apex-brown filter drop-shadow-[0_0_5px_rgba(210,180,140,0.8)]" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <div class="h-[1px] flex-1 bg-apex-brown/30"></div>
+                        <div class="text-center font-cinzel text-xl text-apex-brown tracking-widest font-semibold px-4 drop-shadow-md">APEX LIVE</div>
+                        <div class="h-[1px] flex-1 bg-apex-brown/30"></div>
+                    </div>
+                    <p class="text-center text-xs text-apex-text/60 mb-6">ที่ปรึกษา พูดคุยโต้ตอบแบบเรียลไทม์ (แชท/โทร)</p>
+                    
+                    <div class="flex justify-between items-center bg-[#0d170f]/70 px-5 py-4 rounded-xl border border-apex-green hover:border-apex-brown/50 transition-colors group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 rounded-full bg-apex-brown/10 flex items-center justify-center border border-apex-brown/30 group-hover:bg-apex-brown/20 transition-colors">
+                                <svg class="w-5 h-5 fill-apex-brown svg-glow-pink" viewBox="0 0 24 24">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                            </div>
+                            <span class="text-[15px] font-medium tracking-wide">Live Session (15 Mins)</span>
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-apex-brown font-bold text-xl drop-shadow-sm">139</span><span class="text-apex-brown/70 text-sm font-light">.-</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-[#0d170f]/70 px-5 py-4 rounded-xl border border-apex-green hover:border-apex-brown/50 transition-colors group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 rounded-full bg-apex-brown/10 flex items-center justify-center border border-apex-brown/30 group-hover:bg-apex-brown/20 transition-colors">
+                                <svg class="w-5 h-5 fill-apex-brown svg-glow-blue" viewBox="0 0 24 24">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                            </div>
+                            <span class="text-[15px] font-medium tracking-wide">Live Session (30 Mins)</span>
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-apex-brown font-bold text-xl drop-shadow-sm">259</span><span class="text-apex-brown/70 text-sm font-light">.-</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-[#0d170f]/70 px-5 py-4 rounded-xl border border-apex-green hover:border-apex-brown/50 transition-colors group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 rounded-full bg-apex-brown/10 flex items-center justify-center border border-apex-brown/30 group-hover:bg-apex-brown/20 transition-colors">
+                                <svg class="w-5 h-5 fill-apex-brown svg-glow-yellow" viewBox="0 0 24 24">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                            </div>
+                            <span class="text-[15px] font-medium tracking-wide">Deep Dive (60 Mins)</span>
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-apex-brown font-bold text-xl drop-shadow-sm">459</span><span class="text-apex-brown/70 text-sm font-light">.-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <div class="h-[1px] flex-1 bg-apex-brown/30"></div>
+                        <div class="text-center font-cinzel text-xl text-apex-brown tracking-widest font-semibold px-4 drop-shadow-md">APEX DESIGN</div>
+                        <div class="h-[1px] flex-1 bg-apex-brown/30"></div>
+                    </div>
+                    <p class="text-center text-xs text-apex-text/60 mb-6">ศาสตร์ตัวเลขและศิลปะเสริมพลังงาน (7-14วัน)</p>
+                    
+                    <div class="flex justify-between items-center bg-[#0d170f]/70 px-5 py-4 rounded-xl border border-apex-green hover:border-apex-brown/50 transition-colors group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 rounded-full bg-apex-brown/10 flex items-center justify-center border border-apex-brown/30 group-hover:bg-apex-brown/20 transition-colors">
+                                <svg class="w-5 h-5 fill-apex-brown svg-glow-pink" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </div>
+                            <span class="text-[15px] font-medium tracking-wide">Number Analysis</span>
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-apex-brown font-bold text-xl drop-shadow-sm">99</span><span class="text-apex-brown/70 text-sm font-light">.-</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-[#0d170f]/70 px-5 py-4 rounded-xl border border-apex-green hover:border-apex-brown/50 transition-colors group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 rounded-full bg-apex-brown/10 flex items-center justify-center border border-apex-brown/30 group-hover:bg-apex-brown/20 transition-colors">
+                                <svg class="w-5 h-5 fill-apex-brown svg-glow-blue" viewBox="0 0 24 24"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/></svg>
+                            </div>
+                            <span class="text-[15px] font-medium tracking-wide">Destiny Wallpaper</span>
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-apex-brown font-bold text-xl drop-shadow-sm">199</span><span class="text-apex-brown/70 text-sm font-light">.-</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-[#0d170f]/70 px-5 py-4 rounded-xl border border-apex-green hover:border-apex-brown/50 transition-colors group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-9 h-9 rounded-full bg-apex-brown/10 flex items-center justify-center border border-apex-brown/30 group-hover:bg-apex-brown/20 transition-colors">
+                                <svg class="w-5 h-5 fill-apex-brown svg-glow-yellow" viewBox="0 0 24 24"><path d="M12.16 2.03c-.05-.01-.11-.02-.16-.02s-.11.01-.16.02l-9.53 4c-.17.07-.29.23-.31.41L1.87 11.7c-.01.18.06.35.2.47l9.64 8.78c.08.07.18.11.29.11s.21-.04.29-.11l9.64-8.78c.14-.12.21-.29.2-.47l-.13-5.26c-.02-.18-.14-.34-.31-.41l-9.53-4zm-7.6 4.96l7.44-3.12 7.44 3.12-2.12 3.01H7.68L4.56 6.99zm-2.02 4h4.48l1.41 4H4.01l-1.47-4zm6.49 4h6.06L12 20.66 9.03 14.99zm8.48 0h-4.43l1.41-4h4.49l-1.47 4z"/></svg>
+                            </div>
+                            <span class="text-[15px] font-medium tracking-wide">Full Design</span>
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-apex-brown font-bold text-xl drop-shadow-sm">299</span><span class="text-apex-brown/70 text-sm font-light">.-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel p-8 bg-gradient-to-b from-[#172a1c]/80 to-[#0a120d]/90 border-apex-brown/30 relative overflow-hidden">
+            <svg class="absolute top-4 right-4 w-10 h-10 fill-apex-brown/10 pointer-events-none" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+            <svg class="absolute bottom-4 left-4 w-10 h-10 fill-apex-brown/10 pointer-events-none" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+
+            <div class="flex flex-col items-center text-center relative z-10">
+                <div class="inline-flex items-center justify-center p-3 rounded-full bg-apex-brown/10 border border-apex-brown/30 mb-4 shadow-[0_0_15px_rgba(210,180,140,0.2)]">
+                    <svg class="w-6 h-6 fill-apex-brown" viewBox="0 0 24 24">
+                        <path d="M12.16 2.03c-.05-.01-.11-.02-.16-.02s-.11.01-.16.02l-9.53 4c-.17.07-.29.23-.31.41L1.87 11.7c-.01.18.06.35.2.47l9.64 8.78c.08.07.18.11.29.11s.21-.04.29-.11l9.64-8.78c.14-.12.21-.29.2-.47l-.13-5.26c-.02-.18-.14-.34-.31-.41l-9.53-4zm-7.6 4.96l7.44-3.12 7.44 3.12-2.12 3.01H7.68L4.56 6.99zm-2.02 4h4.48l1.41 4H4.01l-1.47-4zm6.49 4h6.06L12 20.66 9.03 14.99zm8.48 0h-4.43l1.41-4h4.49l-1.47 4z"/>
+                    </svg>
+                </div>
+                
+                <h3 class="font-cinzel text-3xl md:text-4xl text-apex-brown font-bold tracking-widest mb-2 drop-shadow-md">APEX BLUEPRINT</h3>
+                <p class="text-apex-text/80 text-lg mb-8 tracking-wide">บริการระดับพรีเมียม เพื่อการเปลี่ยนแปลงระยะยาว</p>
+
+                <div class="w-full max-w-xl bg-[#0d170f]/90 rounded-2xl p-8 border border-apex-brown/20 shadow-[0_8px_30px_rgba(0,0,0,0.5)] relative">
+                    <div class="mb-2">
+                        <span class="block text-xl md:text-2xl text-apex-text mb-2 tracking-wide font-medium">The Clarity (ดวงราย 12 เดือน)</span>
+                        <div class="font-cinzel text-5xl text-apex-brown font-bold drop-shadow-lg mb-2">799.-</div>
+                        <span class="inline-block px-3 py-1 bg-apex-brown/10 rounded-full text-xs text-apex-brown/80 font-light tracking-wide border border-apex-brown/20">เจาะลึกดวงชะตา พร้อมวิธีรับมือ (PDF)</span>
+                    </div>
+                    
+                    <div class="moon-divider"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-6">
+                        <div class="p-3 rounded-xl bg-[#172a1c]/50 border border-apex-green/50 flex flex-col justify-center">
+                            <span class="block text-sm text-apex-text/70 mb-1">The Compass (6 เดือน)</span>
+                            <span class="text-lg text-apex-brown font-semibold drop-shadow-sm">499.-</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-[#172a1c]/50 border border-apex-green/50 flex flex-col justify-center">
+                            <span class="block text-sm text-apex-text/70 mb-1">The Transformation</span>
+                            <span class="text-lg text-apex-brown font-semibold drop-shadow-sm">699.-</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-gradient-to-br from-[#d2b48c]/20 to-[#a68b6a]/10 border border-apex-brown/50 flex flex-col justify-center relative overflow-hidden shadow-[0_0_10px_rgba(210,180,140,0.2)]">
+                            <span class="block text-xs text-apex-brown font-medium mb-1">PROMO : First 20</span>
+                            <span class="block text-[10px] text-apex-text/70">Live 30 Mins</span>
+                            <span class="text-lg text-apex-brown font-bold drop-shadow-sm">199.- <span class="text-xs line-through text-apex-text/50">259.-</span></span>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                         <span class="text-xs text-apex-brown/50 tracking-widest uppercase font-cinzel">Apex Star : Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel p-8 relative">
+            <h3 class="font-cinzel text-2xl text-apex-brown font-bold tracking-widest mb-6 flex items-center gap-3">
+                <svg class="w-5 h-5 fill-apex-brown filter drop-shadow-[0_0_4px_rgba(210,180,140,0.8)]" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                ABOUT ME
+            </h3>
+            
+            <ul class="space-y-4 text-[15px] font-light text-apex-text/90 leading-relaxed tracking-wide">
+                <li class="flex items-start gap-3">
+                    <div class="mt-1.5 flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 fill-apex-brown/80" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                    </div>
+                    <p>สวัสดีค่ะ โจวเฟิร์น นะคะ เจ้าของ Apex Destiny จุดเริ่มต้นของเฟิร์นมาจากการโดนทักว่าจะ "สอบไม่ผ่าน" แต่ก็พิสูจน์แล้วว่าความพยายามชนะคำทำนายได้ (ถึงแม้จะแอบเจ็บใจก็เถอะ!)</p>
+                </li>
+                <li class="flex items-start gap-3">
+                    <div class="mt-1.5 flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 fill-apex-brown/80" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                    </div>
+                    <p>นั่นคือเหตุผลที่เฟิร์นมาศึกษาโหราศาสตร์ตั้งแต่นั้นเป็นต้นมา ไม่ใช่เพื่อบอกว่าคุณจะเจอเคราะห์ร้ายอะไร แต่เพื่อบอกว่า "คุณจะจัดการกับมันยังไง"</p>
+                </li>
+                <li class="flex items-start gap-3">
+                    <div class="mt-1.5 flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 fill-apex-brown/80" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                    </div>
+                    <p>ระหว่างทางของการเรียนรู้ เฟิร์นโชคดีที่ได้เจอลูกดวงน่ารักๆ แวะเวียนเข้ามาให้ฝึกฝน หลายครั้งเฟิร์นได้ช่วยเหลือลูกดวง และอีกหลายครั้งที่ลูกดวงกลายเป็นครูให้บทเรียนกับเฟิร์น</p>
+                </li>
+                <li class="flex items-start gap-3">
+                    <div class="mt-1.5 flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 fill-apex-brown/80" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                    </div>
+                    <p>เฟิร์นอาจจะไม่ใช่แม่หมอที่เก่งเท่าคนอื่นๆ แต่เฟิร์นสัญญาว่าจะเป็น "นักเรียนที่ตั้งใจที่สุด" จะไม่หยุดพัฒนาตัวเอง เพื่อเป็นเข็มทิศที่แม่นยำขึ้น คมชัดขึ้น และพาทุกคนไปเจอเส้นทางที่ดีที่สุดในแบบที่เฟิร์นเคยพาตัวเองผ่านมาได้</p>
+                </li>
+                <li class="flex items-center gap-3 bg-apex-brown/5 p-3 rounded-lg border border-apex-brown/10 mt-2">
+                    <div class="flex-shrink-0">
+                        <svg class="w-4 h-4 fill-apex-brown filter drop-shadow-[0_0_3px_rgba(210,180,140,0.5)]" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                    </div>
+                    <p class="text-apex-brown/90 font-medium">ขอบคุณที่ให้โอกาสเฟิร์นได้ช่วยเหลือทุกคนนะคะ ยินดีที่ได้รู้จักค่ะ</p>
+                </li>
+            </ul>
+        </section>
+
+        <footer class="mt-8 mb-12 flex flex-col items-center justify-center text-center z-20">
+            <p class="font-cinzel text-apex-text/50 text-sm tracking-widest mb-6 uppercase flex items-center gap-3">
+                <span class="w-8 h-[1px] bg-apex-text/30"></span>
+                Connect with Apex Destiny
+                <span class="w-8 h-[1px] bg-apex-text/30"></span>
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://www.instagram.com/apexdestiny.th" target="_blank" rel="noopener noreferrer" 
+                   class="group relative inline-flex items-center justify-center gap-3 px-6 py-3 bg-[#0d170f]/90 border border-apex-brown/50 rounded-full text-apex-brown hover:bg-gradient-to-r hover:from-apex-brown hover:to-[#f0ead6] hover:border-transparent hover:text-[#0a120d] transition-all duration-300 shadow-[0_0_15px_rgba(210,180,140,0.15)] hover:shadow-[0_0_30px_rgba(210,180,140,0.6)] backdrop-blur-sm overflow-hidden">
+                    <svg class="w-4 h-4 fill-current transition-colors relative z-10" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                    </svg>
+                    <span class="font-cinzel font-bold tracking-widest text-xs relative z-10">INSTAGRAM</span>
+                </a>
+
+                <a href="https://x.com/apexdestinyTH" target="_blank" rel="noopener noreferrer" 
+                   class="group relative inline-flex items-center justify-center gap-3 px-6 py-3 bg-[#0d170f]/90 border border-apex-brown/50 rounded-full text-apex-brown hover:bg-gradient-to-r hover:from-apex-brown hover:to-[#f0ead6] hover:border-transparent hover:text-[#0a120d] transition-all duration-300 shadow-[0_0_15px_rgba(210,180,140,0.15)] hover:shadow-[0_0_30px_rgba(210,180,140,0.6)] backdrop-blur-sm overflow-hidden">
+                    <svg class="w-4 h-4 fill-current transition-colors relative z-10" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    <span class="font-cinzel font-bold tracking-widest text-xs relative z-10">X (TWITTER)</span>
+                </a>
+
+                <a href="https://lin.ee/k7lUajX" target="_blank" rel="noopener noreferrer" 
+                   class="group relative inline-flex items-center justify-center gap-3 px-6 py-3 bg-[#0d170f]/90 border border-apex-brown/50 rounded-full text-apex-brown hover:bg-gradient-to-r hover:from-apex-brown hover:to-[#f0ead6] hover:border-transparent hover:text-[#0a120d] transition-all duration-300 shadow-[0_0_15px_rgba(210,180,140,0.15)] hover:shadow-[0_0_30px_rgba(210,180,140,0.6)] backdrop-blur-sm overflow-hidden">
+                    <svg class="w-4 h-4 fill-current transition-colors relative z-10" viewBox="0 0 24 24">
+                        <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.122.303.079.758.039 1.08l-.172 1.027c-.053.303-.242 1.186 1.039.647 1.281-.54 6.911-4.069 9.428-6.967 1.739-1.907 2.573-3.843 2.573-5.987zm-14.715 2.14c0 .248-.203.452-.452.452H5.602c-.249 0-.452-.204-.452-.452V6.621c0-.248.203-.452.452-.452h3.231c.249 0 .452.204.452.452v.871c0 .248-.203.452-.452.452H6.473v1.31h2.36c.249 0 .452.204.452.452v.872c0 .248-.203.452-.452.452H6.473v1.411h2.36c.249 0 .452.204.452.452v.871zm3.87 0c0 .248-.203.452-.452.452h-.871c-.249 0-.452-.204-.452-.452V6.621c0-.248.203-.452.452-.452h.871c.249 0 .452.204.452.452v5.823zm6.202 0c0 .248-.203.452-.452.452h-.871c-.139 0-.265-.064-.347-.166l-3.036-3.791v3.505c0 .248-.203.452-.452.452h-.872c-.248 0-.452-.204-.452-.452V6.621c0-.248.204-.452.452-.452h.872c.138 0 .264.064.346.166l3.037 3.792V6.621c0-.248.203-.452.452-.452h.871c.249 0 .452.204.452.452v5.823z"/>
+                    </svg>
+                    <span class="font-cinzel font-bold tracking-widest text-xs relative z-10">LINE</span>
+                </a>
+
+                <a href="https://www.tiktok.com/@apexdestiny.th" target="_blank" rel="noopener noreferrer" 
+                   class="group relative inline-flex items-center justify-center gap-3 px-6 py-3 bg-[#0d170f]/90 border border-apex-brown/50 rounded-full text-apex-brown hover:bg-gradient-to-r hover:from-apex-brown hover:to-[#f0ead6] hover:border-transparent hover:text-[#0a120d] transition-all duration-300 shadow-[0_0_15px_rgba(210,180,140,0.15)] hover:shadow-[0_0_30px_rgba(210,180,140,0.6)] backdrop-blur-sm overflow-hidden">
+                    <svg class="w-4 h-4 fill-current transition-colors relative z-10" viewBox="0 0 24 24">
+                        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.01.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.78-1.15 5.54-3.33 7.39-1.92 1.64-4.5 2.51-6.98 2.21-2.75-.32-5.3-1.84-6.83-4.1-1.28-1.89-1.72-4.28-1.26-6.52.45-2.22 1.83-4.21 3.76-5.46 1.84-1.19 4.11-1.63 6.25-1.29l-.01 4.15c-1.21-.2-2.45-.11-3.56.41-1.31.6-2.27 1.82-2.58 3.22-.32 1.48.01 3.06 1.02 4.15 1.08 1.17 2.8 1.63 4.35 1.25 1.57-.39 2.77-1.65 3.05-3.26.13-.75.14-1.52.14-2.27.02-6.54.01-13.08.01-19.63z"/>
+                    </svg>
+                    <span class="font-cinzel font-bold tracking-widest text-xs relative z-10">TIKTOK</span>
+                </a>
+            </div>
+            
+            <div class="mt-16 flex flex-col items-center opacity-40">
+                <svg class="w-6 h-6 fill-apex-text mb-2" viewBox="0 0 24 24"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+                <span class="text-xs font-mitr tracking-widest uppercase">Apex Destiny Theme Design</span>
+            </div>
+        </footer>
+
+    </main>
+
+</body>
+</html>
